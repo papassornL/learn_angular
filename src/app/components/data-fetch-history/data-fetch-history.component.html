@@ -173,7 +173,7 @@
             </td>
 
             <!-- Progress-bar -->
-            <td class="p-4">
+            <td class="p-4 progress-segments-container">
               <div class="space-y-2">
                 
                 <!-- Total Count -->
@@ -183,19 +183,19 @@
                 </div>
                 
                 <!-- Progress Bar with Segments -->
-                <div class="flex space-x-1 items-center h-6">
+                <div class="flex items-center h-6 progress-segments-bar">
                   <!-- Green segments -->
-                  <div class="flex space-x-[1px]">
+                  <div class="flex">
                     <div 
                       *ngFor="let i of [].constructor(Math.round(record.successPercentage/100 * 20))"
-                      class="w-1 h-4 bg-green-500 rounded-sm">
+                      class="w-1 h-5 bg-green-500 rounded-sm progress-segment-green">
                     </div>
                   </div>
                   <!-- Red segments -->
-                  <div class="flex space-x-[1px]">
+                  <div class="flex">
                     <div 
                       *ngFor="let i of [].constructor(Math.round(record.failurePercentage/100 * 20))"
-                      class="w-1 h-4 bg-red-500 rounded-sm">
+                      class="w-1 h-5 bg-red-500 rounded-sm progress-segment-red">
                     </div>
                   </div>
                 </div>
@@ -229,12 +229,24 @@
             <!-- User Info -->
             <td class="p-4">
               <div class="flex items-center space-x-3">
-                <div class="w-8 h-8 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-xs font-bold">
+                <!-- Avatar or Settings Icon -->
+                <div *ngIf="record.user.name === 'System' && record.user.id === 'Scheduling Job'" 
+                     class="w-8 h-8 bg-gray-700 text-white rounded-full flex items-center justify-center">
+                  <i class="pi pi-cog text-sm"></i>
+                </div>
+                <div *ngIf="!(record.user.name === 'System' && record.user.id === 'Scheduling Job')" 
+                     class="w-8 h-8 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-xs font-bold">
                   {{record.user.avatar}}
                 </div>
                 <div class="text-sm">
                   <div class="font-medium text-gray-900">{{record.user.name}}</div>
-                  <div class="text-green-600 italic">{{record.user.id}}</div>
+                  <div class="italic" 
+                       [ngClass]="{
+                         'text-yellow-600': record.user.name === 'System' && record.user.id === 'Scheduling Job',
+                         'text-green-600': !(record.user.name === 'System' && record.user.id === 'Scheduling Job')
+                       }">
+                    {{record.user.id}}
+                  </div>
                 </div>
               </div>
             </td>
