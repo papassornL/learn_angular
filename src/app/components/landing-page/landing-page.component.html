@@ -1,0 +1,28 @@
+<div class="container">
+    <div class="header-bar">
+        <div class="menu-bar">
+            <div class="menu-left">
+              <div class="logo"></div>
+              <div class="card flex justify-center">
+                <p-menu #menu [model]="items" [popup]="true" />
+                <i class="pi pi-align-left menu-icon" routerLink="/landing-page" (click)="menu.toggle($event)"></i>            </div>
+              <span class="menu-title">ติดตามการทำรายการ</span>
+              <i class="pi pi-angle-right"></i>
+              <span class="menu-subtitle">ประวัติการเปลี่ยนแปลงราคา</span>
+            </div>
+          </div>
+        <div class="user-info">
+            <div class="user-avatar">ชน</div>
+            <div class="user-details">
+              <div class="user-name">ชื่อ นามสกุล</div>
+              <div class="user-id">i1234567</div>
+            </div>
+            <div class="user-option">
+                <i class="pi pi-chevron-down"></i>
+            </div>
+        </div>
+    </div>
+    <div class="main-content">
+       
+    </div>
+</div>
