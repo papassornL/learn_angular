@@ -1,6 +1,13 @@
-# PrePp
+# PrePp - Angular Data Fetch History
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.15.
+
+## Features
+
+- **Data Fetch History**: Track and monitor data retrieval operations
+- **PrimeNG Components**: Rich UI components for enhanced user experience
+- **Tailwind CSS**: Modern utility-first CSS framework
+- **Thai Language Support**: Full Thai language interface
 
 ## Development server
 
