@@ -273,7 +273,8 @@
 
             <!-- Action Menu -->
             <td class="p-4">
-              <i class="pi pi-file text-gray-400 cursor-pointer hover:text-gray-600"></i>
+              <i class="pi pi-file text-gray-400 cursor-pointer hover:text-gray-600" 
+                 (click)="openDialog(record)"></i>
             </td>
           </tr>
         </ng-template>
@@ -301,6 +302,148 @@
           <!-- Next Button -->
           <button class="px-3 py-1 text-sm text-gray-600 border-gray-400 hover:text-gray-800 border rounded-lg px-4 py-2">
             ถัดไป <i class="pi pi-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right Side Dialog/Sidebar -->
+  <div *ngIf="isDialogOpen" 
+       class="fixed inset-0 z-50 overflow-hidden">
+    <!-- Backdrop -->
+    <div class="absolute inset-0 bg-black bg-opacity-50" 
+         (click)="closeDialog()"></div>
+    
+    <!-- Sidebar Panel -->
+    <div class="absolute right-0 top-0 h-full w-96 bg-white shadow-xl transform transition-transform duration-300 ease-in-out">
+      <!-- Header -->
+      <div class="flex items-center justify-between p-6 border-b border-gray-200">
+        <h2 class="text-lg font-semibold text-gray-900">รายละเอียดการเชื่อมต่อข้อมูล</h2>
+        <button (click)="closeDialog()" 
+                class="text-gray-400 hover:text-gray-600">
+          <i class="pi pi-times text-lg"></i>
+        </button>
+      </div>
+
+      <!-- Content -->
+      <div *ngIf="selectedRecord" class="p-6 space-y-6">
+        <!-- Top Section: Date/Time and Status -->
+        <div class="flex justify-between items-start">
+          <!-- Date/Time Info -->
+          <div>
+            <h4 class="text-sm font-medium text-gray-500 mb-1">วัน/เวลาที่ทำรายการ</h4>
+            <div class="text-lg font-bold text-gray-900">{{selectedRecord.date}}, {{selectedRecord.time}}</div>
+          </div>
+
+          <!-- Status -->
+          <div>
+            <h4 class="text-sm font-medium text-gray-500 mb-1">ประเภทงาน</h4>
+            <p-tag 
+              [value]="selectedRecord.status" 
+              [severity]="'secondary'"
+              [rounded]="true"
+              [ngClass]="{
+                'custom-blue-tag': selectedRecord.status === 'ข้อมูลสินค้า',
+                'custom-orange-tag': selectedRecord.status === 'ข้อมูลราคา',
+                'custom-success-tag': selectedRecord.status === 'ข้อมูลสำเร็จ'
+              }">
+            </p-tag>
+          </div>
+        </div>
+
+        <!-- Progress Section -->
+        <div class="bg-gray-50 rounded-lg p-4">
+          <!-- Total Count -->
+          <div class="text-lg font-bold mb-4">
+            <span class="text-gray-900">{{selectedRecord.totalRecords}}</span>
+            <span class="text-gray-400 text-lg"> รายการ</span>
+          </div>
+          
+          <!-- Progress Bar -->
+          <div class="flex items-center h-6 mb-4">
+            <div class="flex">
+              <div 
+                *ngFor="let i of [].constructor(Math.round(selectedRecord.successPercentage/100 * 20))"
+                class="w-1 h-5 bg-green-500 rounded-sm progress-segment-green">
+              </div>
+            </div>
+            <div class="flex">
+              <div 
+                *ngFor="let i of [].constructor(Math.round(selectedRecord.failurePercentage/100 * 20))"
+                class="w-1 h-5 bg-red-500 rounded-sm progress-segment-red">
+              </div>
+            </div>
+          </div>
+
+          <!-- Stats -->
+          <div class="space-y-2">
+            <!-- Success -->
+            <div class="flex items-center justify-between">
+              <div class="flex items-center space-x-2">
+                <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+                <span class="text-gray-600">สำเร็จ</span>
+              </div>
+              <div class="flex items-center space-x-2">
+                <span class="font-bold text-green-600">{{selectedRecord.successPercentage}}%</span>
+                <span class="text-gray-400">{{selectedRecord.successCount}} รายการ</span>
+              </div>
+            </div>
+            <!-- Failure -->
+            <div class="flex items-center justify-between">
+              <div class="flex items-center space-x-2">
+                <div class="w-3 h-3 bg-red-500 rounded-full"></div>
+                <span class="text-gray-600">ล้มเหลว</span>
+              </div>
+              <div class="flex items-center space-x-2">
+                <span class="font-bold text-red-600">{{selectedRecord.failurePercentage}}%</span>
+                <span class="text-gray-400">{{selectedRecord.failureCount}} รายการ</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- User Info Section -->
+        <div class="bg-white border border-gray-200 rounded-lg p-4">
+          <h4 class="text-sm font-medium text-gray-500 mb-3">ผู้ที่สั่งดึงข้อมูล</h4>
+          <div class="flex items-center space-x-3">
+            <div *ngIf="selectedRecord.user.name === 'System' && selectedRecord.user.id === 'Scheduling Job'" 
+                 class="w-12 h-12 bg-gray-700 text-white rounded-full flex items-center justify-center">
+              <i class="pi pi-cog text-lg"></i>
+            </div>
+            <div *ngIf="!(selectedRecord.user.name === 'System' && selectedRecord.user.id === 'Scheduling Job')" 
+                 class="w-12 h-12 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-lg font-bold">
+              {{selectedRecord.user.avatar}}
+            </div>
+            <div>
+              <div class="font-bold text-gray-900 text-lg">{{selectedRecord.user.name}}</div>
+              <div class="text-sm" 
+                   [ngClass]="{
+                     'text-yellow-600': selectedRecord.user.name === 'System' && selectedRecord.user.id === 'Scheduling Job',
+                     'text-green-600': !(selectedRecord.user.name === 'System' && selectedRecord.user.id === 'Scheduling Job')
+                   }">
+                {{selectedRecord.user.id}}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Notes Section -->
+        <div>
+          <h4 class="text-sm font-medium text-gray-500 mb-2 flex items-center">
+            <i class="pi pi-pencil mr-2"></i>
+            หมายเหตุ / โน๊ต
+          </h4>
+          <p class="text-gray-700">ระบบใช้เวลาในการประมวลผลมากเกินกว่าที่กำหนด</p>
+        </div>
+      </div>
+
+      <!-- Footer Actions -->
+      <div class="absolute bottom-0 left-0 right-0 p-6 border-t border-gray-200 bg-gray-50">
+        <div class="flex space-x-3 justify-end">
+          <button (click)="closeDialog()" 
+                  class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
+            ยกเลิก
           </button>
         </div>
       </div>

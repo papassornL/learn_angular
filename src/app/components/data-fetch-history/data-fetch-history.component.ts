@@ -50,6 +50,10 @@ interface DataFetchRecord {
 export class DataFetchHistoryComponent {
   Math = Math; // Make Math available in template
   
+  // Dialog/Sidebar properties
+  isDialogOpen = false;
+  selectedRecord: DataFetchRecord | null = null;
+  
   dataFetchRecords: DataFetchRecord[] = [
     {
       id: 1,
@@ -202,4 +206,15 @@ export class DataFetchHistoryComponent {
   selectedUser = this.userOptions[0];
 
   searchText = '';
+
+  // Dialog/Sidebar methods
+  openDialog(record: DataFetchRecord) {
+    this.selectedRecord = record;
+    this.isDialogOpen = true;
+  }
+
+  closeDialog() {
+    this.isDialogOpen = false;
+    this.selectedRecord = null;
+  }
 }
